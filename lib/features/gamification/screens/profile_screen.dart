@@ -22,7 +22,7 @@ class ProfileScreen extends StatelessWidget {
           CustomScrollView(
             slivers: [
               SliverAppBar(
-                expandedHeight: 260,
+                expandedHeight: 300,
                 floating: false,
                 pinned: true,
                 backgroundColor: AppColors.background,

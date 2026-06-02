@@ -3,12 +3,16 @@ class JunkItem {
   final String icon;
   final double sizeMB;
   final String category;
+  final bool isReal;
+  final List<String> filePaths; // actual paths to delete
 
   JunkItem({
     required this.name,
     required this.icon,
     required this.sizeMB,
     required this.category,
+    this.isReal = false,
+    this.filePaths = const [],
   });
 
   String get sizeLabel {

@@ -13,8 +13,8 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.metavisionrs.clean"
-    compileSdk = 34
+    namespace = "com.metavisionrs.clean_droid"
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -38,8 +38,8 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.metavisionrs.clean"
-        minSdk = 21
+        applicationId = "com.metavisionrs.clean_droid"
+        minSdk = flutter.minSdkVersion
         targetSdk = 34
         versionCode = flutter.versionCode
         versionName = flutter.versionName

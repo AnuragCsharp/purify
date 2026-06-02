@@ -64,9 +64,28 @@ class JunkItemTile extends StatelessWidget {
                       fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  item.category,
-                  style: TextStyle(color: color, fontSize: 11),
+                Row(
+                  children: [
+                    Text(item.category, style: TextStyle(color: color, fontSize: 11)),
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: item.isReal
+                            ? AppColors.green.withValues(alpha: 0.15)
+                            : AppColors.textHint.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        item.isReal ? 'Real' : 'Est.',
+                        style: TextStyle(
+                          color: item.isReal ? AppColors.green : AppColors.textHint,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

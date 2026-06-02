@@ -140,6 +140,13 @@ class _CleanerScreenState extends State<CleanerScreen>
                       style: const TextStyle(
                           color: AppColors.textSecondary, fontSize: 13),
                     ),
+                    const SizedBox(height: 6),
+                    Text(
+                      _cleaner.scanStatus.value,
+                      style: const TextStyle(
+                          color: AppColors.textHint, fontSize: 11),
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 )),
           ),

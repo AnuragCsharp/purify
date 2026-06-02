@@ -202,19 +202,53 @@ class _RamScreenState extends State<RamScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Background Processes',
-            style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 16,
-                fontWeight: FontWeight.w700)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('Background Processes',
+                style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700)),
+            Obx(() => _ram.isLoadingProcesses.value
+                ? const SizedBox(
+                    width: 16, height: 16,
+                    child: CircularProgressIndicator(
+                        color: AppColors.purple, strokeWidth: 2))
+                : GestureDetector(
+                    onTap: _ram.loadProcesses,
+                    child: const Icon(Icons.refresh_rounded,
+                        color: AppColors.textSecondary, size: 18))),
+          ],
+        ),
         const SizedBox(height: 12),
-        Obx(() => Column(
-              children: _ram.processes
-                  .map((p) => ProcessTile(
-                      process: p,
-                      totalRamMB: _ram.totalRamMB.value))
-                  .toList(),
-            )),
+        Obx(() {
+          if (_ram.isLoadingProcesses.value && _ram.processes.isEmpty) {
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.all(24),
+                child: CircularProgressIndicator(color: AppColors.purple),
+              ),
+            );
+          }
+          if (_ram.processes.isEmpty) {
+            return Container(
+              padding: const EdgeInsets.all(20),
+              decoration: AppColors.glassCard(radius: 14),
+              child: const Center(
+                child: Text('No background processes found',
+                    style: TextStyle(
+                        color: AppColors.textSecondary, fontSize: 13)),
+              ),
+            );
+          }
+          return Column(
+            children: _ram.processes
+                .map((p) => ProcessTile(
+                    process: p, totalRamMB: _ram.totalRamMB.value))
+                .toList(),
+          );
+        }),
       ],
     ).animate().fadeIn(delay: 300.ms, duration: 400.ms);
   }
