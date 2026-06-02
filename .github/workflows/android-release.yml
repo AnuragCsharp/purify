@@ -88,7 +88,7 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: com.metavisionrs.clean_droid
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          tracks: ${{ github.event.inputs.track || 'internal' }}
+          track: ${{ github.event.inputs.track || 'internal' }}
           status: completed
           inAppUpdatePriority: 2
           whatsNewDirectory: distribution/whatsnew
