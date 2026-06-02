@@ -116,7 +116,7 @@ class MainActivity : FlutterActivity() {
                     }
 
                     "scanJunkFiles" -> {
-                        // Scans accessible dirs for real junk: APKs, .log, .tmp, large thumbnails
+                        // Scans only app-accessible dirs (no MANAGE_EXTERNAL_STORAGE needed)
                         try {
                             val apkFiles = mutableListOf<String>()
                             var apkBytes = 0L
@@ -125,60 +125,37 @@ class MainActivity : FlutterActivity() {
                             val thumbFiles = mutableListOf<String>()
                             var thumbBytes = 0L
 
-                            val externalDirs = mutableListOf<File>()
-                            // Primary external storage
-                            Environment.getExternalStorageDirectory()?.let { externalDirs.add(it) }
-                            // App-specific external dirs (no permission needed)
-                            getExternalCacheDirs()?.forEach { it?.let { d -> externalDirs.add(d) } }
-                            getExternalFilesDirs(null)?.forEach { it?.let { d -> externalDirs.add(d) } }
+                            // App-specific external dirs — no special permission required
+                            val scanDirs = mutableListOf<File>()
+                            getExternalCacheDirs()?.filterNotNull()?.forEach { scanDirs.add(it) }
+                            getExternalFilesDirs(null)?.filterNotNull()?.forEach { scanDirs.add(it) }
+                            // Internal cache
+                            scanDirs.add(cacheDir)
+                            filesDir?.let { scanDirs.add(it) }
 
-                            for (dir in externalDirs) {
+                            for (dir in scanDirs) {
                                 if (!dir.exists()) continue
                                 try {
-                                    dir.walkTopDown()
-                                        .onEnter { !it.name.startsWith(".") }
-                                        .filter { it.isFile }
-                                        .forEach { f ->
-                                            val ext = f.extension.lowercase()
-                                            val len = f.length()
-                                            when {
-                                                ext == "apk" -> {
-                                                    apkFiles.add(f.absolutePath)
-                                                    apkBytes += len
-                                                }
-                                                ext in listOf("log", "txt") && f.name.contains("log", true) -> {
-                                                    logFiles.add(f.absolutePath)
-                                                    logBytes += len
-                                                }
-                                                ext in listOf("tmp", "temp") -> {
-                                                    thumbFiles.add(f.absolutePath)
-                                                    thumbBytes += len
-                                                }
+                                    dir.walkTopDown().filter { it.isFile }.forEach { f ->
+                                        val ext = f.extension.lowercase()
+                                        val len = f.length()
+                                        when {
+                                            ext == "apk" -> { apkFiles.add(f.absolutePath); apkBytes += len }
+                                            ext in listOf("log") || (ext == "txt" && f.name.contains("log", true)) -> {
+                                                logFiles.add(f.absolutePath); logBytes += len
+                                            }
+                                            ext in listOf("tmp", "temp") -> {
+                                                thumbFiles.add(f.absolutePath); thumbBytes += len
                                             }
                                         }
+                                    }
                                 } catch (_: Exception) {}
                             }
 
-                            // Thumbnails from DCIM/.thumbnails
-                            val thumbDir = File(
-                                Environment.getExternalStoragePublicDirectory(
-                                    Environment.DIRECTORY_DCIM
-                                ), ".thumbnails"
-                            )
-                            if (thumbDir.exists()) {
-                                thumbDir.walkBottomUp().filter { it.isFile }.forEach { f ->
-                                    thumbFiles.add(f.absolutePath)
-                                    thumbBytes += f.length()
-                                }
-                            }
-
                             result.success(mapOf(
-                                "apkBytes"   to apkBytes,
-                                "apkPaths"   to apkFiles,
-                                "logBytes"   to logBytes,
-                                "logPaths"   to logFiles,
-                                "thumbBytes" to thumbBytes,
-                                "thumbPaths" to thumbFiles,
+                                "apkBytes"   to apkBytes,   "apkPaths"   to apkFiles,
+                                "logBytes"   to logBytes,   "logPaths"   to logFiles,
+                                "thumbBytes" to thumbBytes, "thumbPaths" to thumbFiles,
                             ))
                         } catch (e: Exception) {
                             result.success(mapOf(
