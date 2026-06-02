@@ -1,0 +1,106 @@
+name: 🚀 Deploy to Google Play Store
+
+on:
+  push:
+    branches:
+      - main
+      - release
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      track:
+        description: 'Play Store track'
+        required: true
+        default: 'internal'
+        type: choice
+        options:
+          - internal
+          - alpha
+          - beta
+          - production
+
+env:
+  FLUTTER_VERSION: '3.35.1'
+  JAVA_VERSION: '17'
+  APP_PACKAGE: 'com.metavisionrs.clean'
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy AAB
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Checkout ──────────────────────────────────────────────
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ── Java setup ────────────────────────────────────────────
+      - name: Set up Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+
+      # ── Flutter setup ─────────────────────────────────────────
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      # ── Dependencies ──────────────────────────────────────────
+      - name: Install dependencies
+        run: flutter pub get
+
+      # ── Lint & test ───────────────────────────────────────────
+      - name: Analyze code
+        run: flutter analyze --no-fatal-infos
+
+      # ── Keystore setup ────────────────────────────────────────
+      # Store your keystore as a base64 secret: KEYSTORE_BASE64
+      # Generate with: base64 -i purgify.jks | pbcopy
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/purgify.jks
+
+      - name: Write key.properties
+        run: |
+          cat > android/key.properties << EOF
+          storePassword=${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword=${{ secrets.KEY_PASSWORD }}
+          keyAlias=${{ secrets.KEY_ALIAS }}
+          storeFile=purgify.jks
+          EOF
+
+      # ── Build AAB ─────────────────────────────────────────────
+      - name: Build App Bundle (AAB)
+        run: flutter build appbundle --release --build-number=${{ github.run_number }}
+
+      # ── Upload to Play Store ──────────────────────────────────
+      - name: Upload to Google Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: ${{ env.APP_PACKAGE }}
+          releaseFiles: build/app/outputs/bundle/release/*.aab
+          track: ${{ github.event.inputs.track || 'internal' }}
+          status: completed
+          whatsNewDirectory: distribution/whatsnew
+          mappingFile: build/app/outputs/mapping/release/mapping.txt
+
+      # ── Notify success ────────────────────────────────────────
+      - name: Notify success
+        if: success()
+        run: |
+          echo "✅ Purgify v${{ github.run_number }} uploaded to Play Store (track: ${{ github.event.inputs.track || 'internal' }})"
+
+      # ── Upload AAB as artifact (backup) ───────────────────────
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: purgify-release-${{ github.run_number }}.aab
+          path: build/app/outputs/bundle/release/*.aab
+          retention-days: 30
