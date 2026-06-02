@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Purgify — Burn the Junk. Own the Speed.</title>
+  <meta name="description" content="Purgify is a powerful Android cleaner app. Scan real junk, boost RAM, analyze storage and earn rewards with the FLAMES gamification system."/>
+  <meta property="og:title" content="Purgify — Phone Cleaner & RAM Booster"/>
+  <meta property="og:description" content="Burn the junk. Own the speed. Real junk scanning, RAM boost and gamified cleaning for Android."/>
+  <meta property="og:type" content="website"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #08090F;
+      --surface:   #10121E;
+      --card:      #161926;
+      --border:    #252840;
+      --orange:    #FF4500;
+      --red:       #FF1744;
+      --yellow:    #FFD700;
+      --cyan:      #00D2FF;
+      --purple:    #7B2FFF;
+      --green:     #00E676;
+      --text:      #FFFFFF;
+      --muted:     #9DB2CE;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(8,9,15,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 60px;
+    }
+    .nav-logo { font-size: 1.3rem; font-weight: 900; letter-spacing: 3px;
+      background: linear-gradient(to top, var(--red), var(--orange), var(--yellow));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-links a { color: var(--muted); text-decoration: none; margin-left: 28px; font-size: .9rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 80px 5% 60px;
+      background: radial-gradient(ellipse at 50% 0%, rgba(255,69,0,.18) 0%, transparent 65%);
+    }
+    .flame-emoji { font-size: 5rem; margin-bottom: 20px; display: block;
+      animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+    h1 { font-size: clamp(2.4rem, 6vw, 4.5rem); font-weight: 900; letter-spacing: 4px;
+      background: linear-gradient(to top, var(--red), var(--orange), var(--yellow));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1; }
+    .tagline { color: var(--muted); font-size: clamp(1rem, 2.5vw, 1.25rem); margin: 16px 0 40px; letter-spacing: 1px; }
+    .cta-group { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--red), var(--orange));
+      color: #fff; border: none; padding: 14px 32px; border-radius: 14px;
+      font-size: 1rem; font-weight: 700; cursor: pointer; text-decoration: none;
+      letter-spacing: 1px; box-shadow: 0 8px 32px rgba(255,69,0,.4);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,69,0,.55); }
+    .btn-outline {
+      background: transparent; color: var(--text); border: 1.5px solid var(--border);
+      padding: 14px 32px; border-radius: 14px; font-size: 1rem; font-weight: 600;
+      cursor: pointer; text-decoration: none; letter-spacing: 1px; transition: border-color .2s;
+    }
+    .btn-outline:hover { border-color: var(--orange); color: var(--orange); }
+
+    /* BADGES */
+    .badges { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 40px; }
+    .badge {
+      display: flex; align-items: center; gap: 8px; padding: 8px 16px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      font-size: .85rem; color: var(--muted);
+    }
+    .badge span { font-size: 1.1rem; }
+
+    /* SECTION */
+    section { padding: 80px 5%; }
+    .section-label { color: var(--orange); font-size: .8rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
+    h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; margin-bottom: 14px; }
+    .section-sub { color: var(--muted); font-size: 1.05rem; max-width: 560px; }
+
+    /* FEATURES GRID */
+    .features { background: var(--surface); }
+    .features-inner { max-width: 1100px; margin: 0 auto; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 48px; }
+    .feature-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      padding: 28px 24px; transition: border-color .25s, transform .25s;
+    }
+    .feature-card:hover { border-color: var(--orange); transform: translateY(-4px); }
+    .feature-icon { font-size: 2.2rem; margin-bottom: 14px; }
+    .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+    .feature-card p { color: var(--muted); font-size: .9rem; }
+    .tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: .72rem; font-weight: 700; margin-top: 10px; }
+    .tag-real { background: rgba(0,230,118,.12); color: var(--green); }
+    .tag-gami { background: rgba(255,69,0,.12); color: var(--orange); }
+
+    /* HOW IT WORKS */
+    .how-inner { max-width: 800px; margin: 0 auto; }
+    .steps { display: flex; flex-direction: column; gap: 0; margin-top: 48px; position: relative; }
+    .steps::before { content:''; position:absolute; left:27px; top:0; bottom:0; width:2px; background: linear-gradient(to bottom, var(--orange), var(--purple)); opacity:.3; }
+    .step { display: flex; gap: 20px; padding-bottom: 36px; }
+    .step-num {
+      width: 54px; height: 54px; min-width: 54px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--red), var(--orange));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 900; position: relative; z-index: 1;
+    }
+    .step-content h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; margin-top: 14px; }
+    .step-content p { color: var(--muted); font-size: .9rem; }
+
+    /* GAMIFICATION */
+    .gami-section { background: var(--surface); }
+    .gami-inner { max-width: 1100px; margin: 0 auto; }
+    .levels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-top: 40px; }
+    .level-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px; text-align: center;
+    }
+    .level-card .lnum { color: var(--orange); font-size: .75rem; font-weight: 700; margin-bottom: 4px; }
+    .level-card .ltitle { font-size: .9rem; font-weight: 700; }
+    .level-card .lxp { color: var(--muted); font-size: .75rem; margin-top: 4px; }
+
+    /* PERMISSIONS */
+    .perms-inner { max-width: 800px; margin: 0 auto; }
+    .perm-list { margin-top: 36px; display: flex; flex-direction: column; gap: 14px; }
+    .perm-item { display: flex; gap: 16px; align-items: flex-start;
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; }
+    .perm-icon { font-size: 1.6rem; }
+    .perm-item h4 { font-size: .95rem; font-weight: 700; margin-bottom: 3px; }
+    .perm-item p { color: var(--muted); font-size: .85rem; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border); padding: 40px 5%;
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;
+    }
+    .footer-brand .nav-logo { font-size: 1.1rem; }
+    .footer-brand p { color: var(--muted); font-size: .8rem; margin-top: 4px; }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: .85rem; transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { color: var(--muted); font-size: .78rem; width: 100%; text-align: center; margin-top: 16px; }
+
+    @media(max-width:600px) {
+      nav .nav-links { display: none; }
+      .steps::before { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">PURGIFY</div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="#gamification">Levels</a>
+    <a href="privacy-policy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="flame-emoji">🔥</span>
+  <h1>PURGIFY</h1>
+  <p class="tagline">Burn the junk. Own the speed.</p>
+  <div class="cta-group">
+    <a href="https://play.google.com/store/apps/details?id=com.metavisionrs.clean" class="btn-primary">
+      ▶ &nbsp;Get on Google Play
+    </a>
+    <a href="#features" class="btn-outline">Learn more</a>
+  </div>
+  <div class="badges">
+    <div class="badge"><span>🤖</span> Android</div>
+    <div class="badge"><span>🆓</span> Free</div>
+    <div class="badge"><span>🔒</span> No data collection</div>
+    <div class="badge"><span>🔥</span> FLAMES gamification</div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-inner">
+    <p class="section-label">What Purgify does</p>
+    <h2>Real cleaning. Real results.</h2>
+    <p class="section-sub">Every scan is different because Purgify reads your actual filesystem — no faked numbers.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🗑️</div>
+        <h3>Junk Cleaner</h3>
+        <p>Scans temp files, app cache, APK leftovers, log files and thumbnails across your storage.</p>
+        <span class="tag tag-real">Real scan</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>RAM Booster</h3>
+        <p>Lists your actual running background processes with real memory usage and terminates them.</p>
+        <span class="tag tag-real">Real processes</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Storage Analyzer</h3>
+        <p>Interactive pie chart breaking down Apps, Photos, Videos, Music and Other files by actual size.</p>
+        <span class="tag tag-real">Real storage</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <h3>FLAMES Gamification</h3>
+        <p>Earn XP, level up through 12 titles, unlock achievements and complete daily missions.</p>
+        <span class="tag tag-gami">Gamified</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>Daily Missions</h3>
+        <p>Daily Cleanse, Power Surge and Big Burn — fresh challenges every day to keep your phone clean.</p>
+        <span class="tag tag-gami">Gamified</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌑</div>
+        <h3>Dark Fire Theme</h3>
+        <p>Stunning dark UI with fire gradients, Lottie animations and smooth transitions throughout.</p>
+        <span class="tag tag-real">Polished UI</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="how-inner">
+    <p class="section-label">How it works</p>
+    <h2>Three taps to a clean phone.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Scan</h3>
+          <p>Purgify scans your temp directory, app cache, support folder and external storage for real junk files — different results every time.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Review & Burn</h3>
+          <p>See exactly what was found (Real vs. Estimated badge on each item), then tap <strong>BURN IT ALL</strong> to delete the real files.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Boost RAM</h3>
+          <p>Switch to the Boost tab. Your actual background apps are listed with real memory usage. Tap <strong>IGNITE BOOST</strong> to kill them and free RAM.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">🔥</div>
+        <div class="step-content">
+          <h3>Earn XP & Level Up</h3>
+          <p>Every clean and boost earns XP. Level up from Novice to Inferno God across 12 ranks. Unlock achievements and maintain your daily streak.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GAMIFICATION -->
+<section class="gami-section" id="gamification">
+  <div class="gami-inner">
+    <p class="section-label">FLAMES System</p>
+    <h2>12 Levels. One goal.</h2>
+    <p class="section-sub">Clean more, boost more, maintain your streak — and climb from Novice to Inferno God.</p>
+    <div class="levels-grid">
+      <div class="level-card"><div class="lnum">LEVEL 1</div><div class="ltitle">🔥 Novice</div><div class="lxp">0 XP</div></div>
+      <div class="level-card"><div class="lnum">LEVEL 2</div><div class="ltitle">🔥 Cache Buster</div><div class="lxp">100 XP</div></div>
+      <div class="level-card"><div class="lnum">LEVEL 3</div><div class="ltitle">🔥🔥 RAM Rookie</div><div class="lxp">300 XP</div></div>
+      <div class="level-card"><div class="lnum">LEVEL 4</div><div class="ltitle">🔥🔥 Speed Demon</div><div class="lxp">600 XP</div></div>
+      <div class="level-card"><div class="lnum">LEVEL 5</div><div class="ltitle">🔥🔥🔥 Purifier</div><div class="lxp">1,000 XP</div></div>
+      <div class="level-card"><div class="lnum">LEVEL 6</div><div class="ltitle">🔥🔥🔥 Guardian</div><div class="lxp">1,500 XP</div></div>
+      <div class="level-card"><div class="lnum">LEVEL 7</div><div class="ltitle">🔥🔥🔥🔥 Mem. Master</div><div class="lxp">2,200 XP</div></div>
+      <div class="level-card"><div class="lnum">LEVEL 8</div><div class="ltitle">🔥🔥🔥🔥 Flame Warrior</div><div class="lxp">3,000 XP</div></div>
+      <div class="level-card"><div class="lnum">LEVEL 9</div><div class="ltitle">🔥×5 Fire Lord</div><div class="lxp">4,000 XP</div></div>
+      <div class="level-card"><div class="lnum">LEVEL 10</div><div class="ltitle">🔥×5 Legend</div><div class="lxp">5,500 XP</div></div>
+      <div class="level-card"><div class="lnum">LEVEL 11</div><div class="ltitle">🔥×5 Grand Purifier</div><div class="lxp">7,500 XP</div></div>
+      <div class="level-card"><div class="lnum">LEVEL 12</div><div class="ltitle">🔥×5 Inferno God</div><div class="lxp">10,000 XP</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PERMISSIONS -->
+<section id="permissions">
+  <div class="perms-inner">
+    <p class="section-label">Transparency</p>
+    <h2>Why we need permissions.</h2>
+    <p class="section-sub">Purgify only requests what it needs. No account. No tracking. No cloud uploads.</p>
+    <div class="perm-list">
+      <div class="perm-item">
+        <div class="perm-icon">💾</div>
+        <div>
+          <h4>Storage Access</h4>
+          <p>Needed to scan your Downloads folder, DCIM thumbnails and external storage for APK and log files. All processing is local — nothing leaves your device.</p>
+        </div>
+      </div>
+      <div class="perm-item">
+        <div class="perm-icon">⚡</div>
+        <div>
+          <h4>Kill Background Processes</h4>
+          <p>Required to actually terminate background apps during RAM Boost. Without this the boost would only be visual.</p>
+        </div>
+      </div>
+      <div class="perm-item">
+        <div class="perm-icon">🔋</div>
+        <div>
+          <h4>Battery State</h4>
+          <p>Used to display your battery level and charging status in the home screen header and metrics card.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="nav-logo">PURGIFY</div>
+    <p>by MetaVision RS</p>
+  </div>
+  <div class="footer-links">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms.html">Terms &amp; Conditions</a>
+    <a href="mailto:ceo@metavisionrs.in">Contact</a>
+    <a href="https://github.com/AnuragCsharp/purify">GitHub</a>
+  </div>
+  <div class="footer-copy">© 2025 MetaVision RS. All rights reserved. Purgify is not affiliated with Google LLC.</div>
+</footer>
+
+</body>
+</html>
