@@ -200,7 +200,7 @@ class _LoadingDotsState extends State<_LoadingDots>
 
   @override
   void dispose() {
-    for (final c in _controllers) c.dispose();
+    for (final c in _controllers) { c.dispose(); }
     super.dispose();
   }
 

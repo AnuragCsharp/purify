@@ -83,9 +83,9 @@ class RamController extends GetxController {
     isLoadingProcesses.value = false;
   }
 
+  @override
   Future<void> refresh() => _refreshRam();
 
-  @override
   Future<void> boost() async {
     if (isBoosting.value) return;
     isBoosting.value = true;
