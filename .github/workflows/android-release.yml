@@ -14,6 +14,9 @@ on:
         type: choice
         options: [internal, alpha, beta, production]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-and-deploy:
     name: Build & Deploy AAB
