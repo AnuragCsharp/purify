@@ -48,12 +48,12 @@ jobs:
       # ── 5. Write key.properties ────────────────────────────────────────
       - name: Create key.properties
         run: |
-          cat > android/app/key.properties <<EOF
-          storePassword=${{ secrets.KEYSTORE_PASSWORD }}
-          keyPassword=${{ secrets.KEY_PASSWORD }}
-          keyAlias=${{ secrets.KEY_ALIAS }}
-          storeFile=purgify-release.keystore
-          EOF
+          {
+            echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}"
+            echo "keyPassword=${{ secrets.KEY_PASSWORD }}"
+            echo "keyAlias=${{ secrets.KEY_ALIAS }}"
+            echo "storeFile=purgify-release.keystore"
+          } > android/app/key.properties
 
       # ── 6. Flutter pub get ─────────────────────────────────────────────
       - name: Install dependencies
