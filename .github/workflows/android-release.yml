@@ -82,12 +82,12 @@ jobs:
 
       # ── 10. Deploy to Play Store ───────────────────────────────────────
       - name: Upload to Play Store
-        uses: r0adkll/upload-google-play@v1
+        uses: r0adkll/upload-google-play@v1.1.3
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: com.metavisionrs.clean_droid
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: ${{ github.event.inputs.track || 'internal' }}
+          tracks: ${{ github.event.inputs.track || 'internal' }}
           status: completed
           inAppUpdatePriority: 2
           whatsNewDirectory: distribution/whatsnew
