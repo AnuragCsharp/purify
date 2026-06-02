@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 class DeviceController extends GetxController {
   static const _channel =
-      MethodChannel('com.metavisionrs.clean_droid/system');
+      MethodChannel('com.metavisionrs.clean/system');
   final _deviceInfo = DeviceInfoPlugin();
   final _battery = Battery();
 

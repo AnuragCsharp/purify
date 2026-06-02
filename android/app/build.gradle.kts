@@ -38,7 +38,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.metavisionrs.clean_droid"
+        applicationId = "com.metavisionrs.clean"
         minSdk = flutter.minSdkVersion
         targetSdk = 34
         versionCode = flutter.versionCode

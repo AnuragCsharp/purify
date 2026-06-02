@@ -14,7 +14,7 @@ import io.flutter.plugin.common.MethodChannel
 import java.io.File
 
 class MainActivity : FlutterActivity() {
-    private val channel = "com.metavisionrs.clean_droid/system"
+    private val channel = "com.metavisionrs.clean/system"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)

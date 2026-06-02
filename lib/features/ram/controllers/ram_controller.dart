@@ -20,7 +20,7 @@ class ProcessInfo {
 }
 
 class RamController extends GetxController {
-  static const _channel = MethodChannel('com.metavisionrs.clean_droid/system');
+  static const _channel = MethodChannel('com.metavisionrs.clean/system');
 
   final totalRamMB = 4096.obs;
   final usedRamMB = 2600.obs;

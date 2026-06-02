@@ -8,7 +8,7 @@ import '../models/junk_item.dart';
 enum CleanState { idle, scanning, results, cleaning, done }
 
 class CleanerController extends GetxController {
-  static const _channel = MethodChannel('com.metavisionrs.clean_droid/system');
+  static const _channel = MethodChannel('com.metavisionrs.clean/system');
 
   final state = CleanState.idle.obs;
   final foundItems = <JunkItem>[].obs;
